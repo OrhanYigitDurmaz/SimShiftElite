@@ -32,7 +32,7 @@ const int defaultButtonRanges[numButtons][2] = {
   {100, 200},   // Button 2       The logic works like this: if a input pins is high(hence the name, if a physical button is pressed), 
   {100, 300},   // Button 3       the program adds +8 to every button number. So if you are in gear 1 while not pressing the button,
   {100, 400},   // Button 4       when you press that button you would be in gear 9
-  {800, 100},   // Button 5       
+  {800, 100},   // Button 5       TODO: THIS IS NOT GOOD. We shouldve been using the MaxButton attribute for this. this way it will be dynamic.  
   {800, 200},   // Button 6
   {800, 300},   // Button 7
   {800, 400},   // Button 8
