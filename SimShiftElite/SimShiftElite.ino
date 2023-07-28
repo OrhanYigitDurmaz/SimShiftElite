@@ -42,10 +42,9 @@ void setup() {
   analogReadResolution(12); // Set ADC resolution to 12 bits
 
   Joystick.begin();
+  Joystick.useManualSend(true);
 
-  while (!Serial) {
-    delay(10);
-  }
+  
 
   bool loadFromEEPROM = false;
   if (EEPROM.read(EEPROMAddress) == 'R' && EEPROM.read(EEPROMAddress + 1) == 'A' &&
@@ -112,7 +111,7 @@ void setup() {
       Serial.print(", Y: ");
       Serial.println(buttonRanges[i][1]);
     }
-    Serial.print("Range Offset: ");
+    Serial.println("Range Offset: ");
     Serial.println(rangeOffset);
   }
 
@@ -145,9 +144,13 @@ void loop() {
   int value2 = analogRead(adcPin2);
 
   Serial.print("ADC 1: ");
-  Serial.print(value1);
-  Serial.print("\tADC 2: ");
+  Serial.println(value1);
+  Serial.print("ADC 2: ");
   Serial.println(value2);
+
+  if (Serial.available() > 0) {
+    Serial.println("Baglandi");
+    }
 
   for (int i = 0; i < maxButtonAllowed; i++) {
     int adc1Min = buttonRanges[i][0] - rangeOffset;
@@ -160,13 +163,13 @@ void loop() {
       if (digitalRead(gearHigh) == HIGH) {
         buttonNum += 8;
       }
-      Joystick.pressButton(buttonNum);
+      Joystick.button(buttonNum, true);
     } else {
-      Joystick.releaseButton(i + 1);
+      Joystick.button(i + 1, false);
     }
   }
 
-  Joystick.sendState();
+  Joystick.send_now();
 
   delay(10);
 }
