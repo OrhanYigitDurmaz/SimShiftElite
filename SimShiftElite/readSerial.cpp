@@ -1,8 +1,8 @@
 #include <Arduino.h>
-
+#include <EEPROM.h>
 void setup() {
 
-Serial.begin(115200)
+Serial.begin(115200);
 
 }
 
@@ -12,9 +12,19 @@ void readSerial() {
 
         String receivedData = Serial.readStringUntil("\n")
 
-        if (receivedData == "loadEEPROM") {
-            //DO LOAD EEPROM
-        } else if (receivedData == "")   
+        if (receivedData == "shifter_1") {
+            
+            Serial.println("S1 CALIBRATED");
+
+        } else if (receivedData == "shifter_2") {
+
+            Serial.println("S2 CALIBRATED");
+
+        } else if (receivedData == "shifter_3") {
+
+            Serial.println("S3 CALIBRATED");
+            
+        } 
 
     }
 
