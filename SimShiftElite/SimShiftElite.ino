@@ -8,13 +8,10 @@
 // 4: Add Smoothed library for adc readings
 
 #include <Arduino.h>
-#include <EEPROM.h>
-#include <Joystick.h>
 #include "readSerial.h"
 
 void setup() {
-  Serial.begin(9600);
-  analogReadResolution(12); // Set ADC resolution to 12 bits
+  Serial.begin(115200);
 }
 
 void loop() {

@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <EEPROM.h>
 void setup() {
 
 Serial.begin(115200);
@@ -8,7 +7,7 @@ Serial.begin(115200);
 
 void readSerial() {
 
-    if (Serial.avaliable()) {
+    if (Serial.available()) {
 
         String receivedData = Serial.readStringUntil("\n")
 
