@@ -1,15 +1,8 @@
-#ifndef tl
-#define tl
+#ifndef READSERIAL_H
+#define READSERIAL_H
 
-#include "Arduino.h"
+#include <Arduino.h>
 
+void readSerial();
 
-class ReadSerial  {
-  public:
-    ReadSerial();
-
-    void readSerial();
-
-  private:
-};
 #endif

@@ -8,12 +8,14 @@
 // 4: Add Smoothed library for adc readings
 
 #include <Arduino.h>
+#include <EEPROM.h>
 #include "readSerial.h"
 
 void setup() {
   Serial.begin(115200);
+  EEPROM.begin()
 }
 
 void loop() {
-  ReadSerial.loop
+  readSerial();
 }
