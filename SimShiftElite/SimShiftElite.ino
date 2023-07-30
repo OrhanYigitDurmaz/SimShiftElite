@@ -3,7 +3,7 @@
 
 //TODO:
 // 1: Clean up messy code and add a better logic
-// 2: Add Smoothed library for adc readings
+// 2: Add Smoothed library for adc readings -- not needed, because we are adding rangeOffset
 // 3: Add the main logic
 
 #include <Arduino.h>
