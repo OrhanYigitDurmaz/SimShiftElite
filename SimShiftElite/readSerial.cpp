@@ -11,6 +11,7 @@ void readSerial() {
         if (receivedData == "loadFromEEPROM") {
             Serial.println("loadingFromEEPROM");
             //EEPROM LOADING LOGIC
+            Serial.println("loadFromEEPROM DONE")
           
         
         } else if (receivedData == "writeToEEPROM") {

@@ -23,24 +23,9 @@ void clearEEPROM() {
   }
 }
 
-void writeTheValuesToEEPROM(const String& inputString) {
 
-  if inputString == "shifter_1";
-    writeStringToEEPROM();
-  if else inputString == "shifter_2";
-    writeStringToEEPROM
-    
+void loadFromEEPROM() {
 
-  
+  //EEPROM.get falan
 
-}
-
-void writeStringToEEPROM(int addrOffset, const String &strToWrite) {
-  byte len = strToWrite.length();
-  //  Serial.println(len);
-  EEPROM.write(addrOffset, len);
-  for (int i = 0; i < len; i++)
-  {
-    EEPROM.write(addrOffset + 1 + i, strToWrite[i]);
-  }
 }
