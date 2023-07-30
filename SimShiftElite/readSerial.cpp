@@ -11,23 +11,27 @@ void readSerial() {
         if (receivedData == "loadFromEEPROM") {
             Serial.println("loadingFromEEPROM");
             //EEPROM LOADING LOGIC
-            Serial.println("loadFromEEPROM DONE")
+            Serial.println("loadFromEEPROM DONE");
           
-        
         } else if (receivedData == "writeToEEPROM") {
             Serial.println("writing");
             EEPROM.commit();
-            Serial.println("wrote succesfully!")
+            Serial.println("wrote succesfully!");
 
-        } else if (receivedData == "clearEEPROM") {
+        } else if (receivedData == "cleareeprom") {
             Serial.println("clearing");
-            ();
-            Serial.println("cleared succesfully!")
+            clearEEPROM();
+            Serial.println("cleared succesfully!");
+
+        } else if (receivedData.indexOf("rangeOffset:") != -1) {
+            int number = receivedData.substring(receivedData.indexOf(':') + 1).toInt();
+            Serial.print("Received number: ");
+            Serial.println(number);
 
         } else if (receivedData == "shifter_1") {
             Serial.println("S1 CALIBRATED");
 
-            EEPROM.write()
+            //EEPROM.write()
 
         } else if (receivedData == "shifter_2") {
             Serial.println("S2 CALIBRATED");
