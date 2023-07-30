@@ -29,3 +29,13 @@ void loadFromEEPROM() {
   //EEPROM.get falan
 
 }
+
+void readDataFromEEPROM() {
+  MyData retrievedData1;
+  MyData retrievedData2;
+
+  // Read data from address 0
+  EEPROM.get(0, retrievedData1);
+
+  // Read data from address 1
+  EEPROM.get(sizeof(MyData), retrievedData2);
