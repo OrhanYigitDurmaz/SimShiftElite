@@ -9,7 +9,6 @@ struct MyData {
 MyData data[8] = {
   {4094, 4095},
   {2304, 2305},
-  // Add six more instances with different values
   {1111, 2222},
   {3333, 4444},
   {5555, 6666},
@@ -26,6 +25,12 @@ void setup() {
   for (int i = 0; i < 8; i++) {
     EEPROM.put(i * sizeof(MyData), data[i]);
   }
+  EEPROM.commit();
+
+  // Change a specific value in data array and update the corresponding entry in EEPROM
+  data[3].value1 = 9876;
+  data[3].value2 = 5432;
+  EEPROM.put(3 * sizeof(MyData), data[3]);
   EEPROM.commit();
 }
 
