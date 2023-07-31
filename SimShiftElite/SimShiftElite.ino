@@ -12,25 +12,20 @@
 #include "readSerial.h"
 #include "EEPROMFunctions.h"
 
-struct adcValues {
-  int value1;
-  int value2;
-};
-
 adcValues data[8] = {
-  {4094, 4095},
-  {2304, 2305},
-  {1111, 2222},
-  {3333, 4444},
-  {5555, 6666},
-  {7777, 8888},
-  {9999, 1010},
-  {1212, 1313}
+  {10, 11}, // Initialize with 0, but you can set your own calibration values
+  {100, 110},
+  {1000, 1100},
+  {2000, 2100},
+  {0, 0},
+  {0, 0},
+  {0, 0},
+  {0, 0}
 };
 
 void setup() {
   analogReadResolution(12);
-  startEEPROM();
+  startEEPROMfunc();
   Joystick.begin();
   Serial.begin(115200);
   
@@ -38,11 +33,5 @@ void setup() {
 
 void loop() {
   readSerial();
-
-  writeToEEPROM(data, sizeof(data) / sizeof(data[0]));
-
-  // Reading data from EEPROM
-  adcValues readData[8];
-  readFromEEPROM(readData, sizeof(readData) / sizeof(readData[0]));
-
+  println()
 }

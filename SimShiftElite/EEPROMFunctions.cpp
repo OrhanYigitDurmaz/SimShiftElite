@@ -1,34 +1,29 @@
 #include <Arduino.h>
 #include <EEPROM.h>
+#include "readSerial.h"
 
 int address = 0;
 
-void startEEPROM() {
+
+void startEEPROMfunc() {
   EEPROM.begin(512);
 }
 
-void stopEEPROM() {
+void stopEEPROMfunc() {
   EEPROM.end(); 
 }
 
-void saveToEEPROM() {
+void saveToEEPROMfunc() {
   EEPROM.commit();
 }
 
-void clearEEPROM() {
+void clearEEPROMfunc() {
   int EEPROMSize = EEPROM.length();
-
   for (int i = 0; i < EEPROMSize; i++) {
     EEPROM.write(i, 0);
   }
 }
 
-
-void loadFromEEPROM() {
-
-  //EEPROM.get falan
-
-}
 
 void writeToEEPROM(const adcValues data[], size_t numElements) {
   size_t address = 0;
@@ -49,13 +44,3 @@ void readFromEEPROM(adcValues data[], size_t numElements) {
     address += sizeof(int);
   }
 }
-
-void readDataFromEEPROM() {
-  MyData retrievedData1;
-  MyData retrievedData2;
-
-  // Read data from address 0
-  EEPROM.get(0, retrievedData1);
-
-  // Read data from address 1
-  EEPROM.get(sizeof(MyData), retrievedData2);

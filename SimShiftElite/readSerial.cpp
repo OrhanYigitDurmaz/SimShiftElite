@@ -3,16 +3,61 @@
 #include "readSerial.h"
 #include "EEPROMFunctions.h"
 
+struct Command {
+  const char* name;
+  void (*action)();
+};
+
+int rangeOffset = 100;
+
+// Helper functions for actions
+void loadFromEEPROM() {
+  Serial.println("loadingFromEEPROM");
+  // EEPROM LOADING LOGIC
+  Serial.println("loadFromEEPROM DONE");
+}
+
+void writeToEEPROM() {
+  Serial.println("writing");
+  // EEPROM WRITE LOGIC (if necessary)
+  Serial.println("wrote successfully!");
+}
+
+void clearEEPROM() {
+  Serial.println("clearing");
+  clearEEPROMfunc();
+  Serial.println("cleared successfully!");
+}
+
+void calibrateShifter(int shifterIndex) {
+  data[shifterIndex].value1 = analogRead(A0);
+  data[shifterIndex].value2 = analogRead(A1);
+  Serial.print("S");
+  Serial.print(shifterIndex);
+  Serial.println(" CALIBRATED");
+}
+
+void handleRangeOffset(const String& receivedData) {
+  rangeOffset = receivedData.substring(8).toInt();
+  Serial.print("Received range offset: ");
+  Serial.println(rangeOffset);
+}
+
+// Array to store command mappings
+Command commands[] = {
+  {"loadFromEEPROM", loadFromEEPROM},
+  {"writeToEEPROM", writeToEEPROM},
+  {"cleareeprom", clearEEPROM},
+};
+
 void readSerial() {
     if (Serial.available()) {
-
         String receivedData = Serial.readStringUntil('\n');
-
         if (receivedData == "loadFromEEPROM") {
             Serial.println("loadingFromEEPROM");
             //EEPROM LOADING LOGIC
             Serial.println("loadFromEEPROM DONE");
-          
+  
         } else if (receivedData == "writeToEEPROM") {
             Serial.println("writing");
             EEPROM.commit();
@@ -43,11 +88,6 @@ void readSerial() {
             data[3].value2 = analogRead(A1);
             Serial.println("S3 CALIBRATED");
 
-        } else if (receivedData == "shifter_4") {
-            data[4].value1 = analogRead(A0);
-            data[4].value2 = analogRead(A1);
-            Serial.println("S4 CALIBRATED");
-
         } else if (receivedData == "shifter_5") {
             data[5].value1 = analogRead(A0);
             data[5].value2 = analogRead(A1);
@@ -71,5 +111,5 @@ void readSerial() {
         } else {
             Serial.println("WRONG_FORMAT");
         }
-    }
+    } Serial.flush();
 }
