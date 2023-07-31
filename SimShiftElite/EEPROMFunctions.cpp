@@ -30,6 +30,26 @@ void loadFromEEPROM() {
 
 }
 
+void writeToEEPROM(const adcValues data[], size_t numElements) {
+  size_t address = 0;
+  for (size_t i = 0; i < numElements; ++i) {
+    EEPROM.put(address, data[i].value1);
+    address += sizeof(int);
+    EEPROM.put(address, data[i].value2);
+    address += sizeof(int);
+  }
+}
+
+void readFromEEPROM(adcValues data[], size_t numElements) {
+  size_t address = 0;
+  for (size_t i = 0; i < numElements; ++i) {
+    EEPROM.get(address, data[i].value1);
+    address += sizeof(int);
+    EEPROM.get(address, data[i].value2);
+    address += sizeof(int);
+  }
+}
+
 void readDataFromEEPROM() {
   MyData retrievedData1;
   MyData retrievedData2;

@@ -17,6 +17,17 @@ struct adcValues {
   int value2;
 };
 
+adcValues data[8] = {
+  {4094, 4095},
+  {2304, 2305},
+  {1111, 2222},
+  {3333, 4444},
+  {5555, 6666},
+  {7777, 8888},
+  {9999, 1010},
+  {1212, 1313}
+};
+
 void setup() {
   analogReadResolution(12);
   startEEPROM();
@@ -27,4 +38,11 @@ void setup() {
 
 void loop() {
   readSerial();
+
+  writeToEEPROM(data, sizeof(data) / sizeof(data[0]));
+
+  // Reading data from EEPROM
+  adcValues readData[8];
+  readFromEEPROM(readData, sizeof(readData) / sizeof(readData[0]));
+
 }
