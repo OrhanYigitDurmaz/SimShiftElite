@@ -15,18 +15,19 @@ struct adcValues {
   int value2;
 };
 
-adcValues data[8] = {
-  {10, 11},
-  {100, 110},
-  {1000, 1100},
-  {2000, 2100},
-  {3000, 0},
-  {3000, 60},
-  {5000, 40},
-  {6000, 20}
+adcValues data[9] = {
+  {0, 0},
+  {0, 0},
+  {0, 0},
+  {0, 0},
+  {0, 0},
+  {0, 0},
+  {0, 0},
+  {0, 0},
+  {100, 100}    //first one is the rangeOffset. its here because it gets written to the eeprom
 };
 
-int rangeOffset = 100;
+int rangeOffset = data[9].value1;
 
 bool isWithinRange(adcValues values, int rangeOffset, int potValue1, int potValue2) {
   int lowerBound1 = values.value1 - rangeOffset;
@@ -44,7 +45,7 @@ void setup() {
   EEPROM.get(0, data);
   Joystick.begin();
   Serial.begin(115200);
-  int rangeOffset = 100;
+  rangeOffset = data[9].value1;
   
 }
 
@@ -58,6 +59,7 @@ void loop() {
   
         } else if (receivedData == "writeToEEPROM") {
             Serial.println("writing");
+            EEPROM.put(0, data);
             EEPROM.commit();
             Serial.println("wrote succesfully!");
 
@@ -67,11 +69,25 @@ void loop() {
             for (int i = 0; i < EEPROMSize; i++) {
             EEPROM.write(i, 0);
             }
+            EEPROM.commit();
+            Serial.println("cleared succesfully!");
+
+        } else if (receivedData == "clearDATA") {
+            Serial.println("clearing");
+            for (int i = 0; i < 9; i++) {
+              data[i].value1 = 0;
+              data[i].value2 = 0;
+            }
             Serial.println("cleared succesfully!");
 
         } else if (receivedData.indexOf("rangeOffset:") != -1) {
-            int rangeOffset = receivedData.substring(receivedData.indexOf(':') + 1).toInt();
+            int newRangeOffset = receivedData.substring(receivedData.indexOf(':') + 1).toInt();
+            rangeOffset = newRangeOffset;
             Serial.print("RangeOffset: ");
+            Serial.println(rangeOffset);
+            data[9].value1 = rangeOffset;
+
+        } else if (receivedData == "print") {
             Serial.println(rangeOffset);
 
         } else if (receivedData == "shifter_1") {
@@ -88,6 +104,11 @@ void loop() {
             data[3].value1 = analogRead(A0);
             data[3].value2 = analogRead(A1);
             Serial.println("S3 CALIBRATED");
+
+        } else if (receivedData == "shifter_4") {
+            data[4].value1 = analogRead(A0);
+            data[4].value2 = analogRead(A1);
+            Serial.println("S4 CALIBRATED");
 
         } else if (receivedData == "shifter_5") {
             data[5].value1 = analogRead(A0);
@@ -120,18 +141,20 @@ void loop() {
   Serial.print(potValue1);
   Serial.print(", ");
   Serial.println(potValue2);
-  delay(100);
+  delay(10);
 
-  for (int i = 0; i < 8; i++) {
+  for (int i = 1; i < 9; i++) {
     if (isWithinRange(data[i], rangeOffset, potValue1, potValue2)) {
       Serial.print("Shifter ");
       Serial.print(i);
       Serial.println(" is within the range.");
+      Joystick.button(i, true);
   } else {
+      Joystick.button(i,false);
       continue;
   }
 
   }
 
-  delay(100);
+  delay(10);
 }
