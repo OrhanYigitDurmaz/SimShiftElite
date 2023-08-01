@@ -74,6 +74,7 @@ void loop() {
             EEPROM.write(i, 0);
             }
             EEPROM.commit();
+            EEPROM.get(0, data);
             Serial.println("cleared succesfully!");
 
         } else if (receivedData == "clearDATA") {
@@ -141,25 +142,36 @@ void loop() {
 
   int potValue1 = analogRead(A0);
   int potValue2 = analogRead(A1);
+  bool add8 = digitalRead(9) == HIGH;
 
   Serial.print(potValue1);
   Serial.print(", ");
   Serial.println(potValue2);
-  delay(1000);
+  delay(10);
 
   for (int i = 0; i < 8; i++) {
     if (isWithinRange(data[i], rangeOffset, potValue1, potValue2)) {
+      int buttonNumber = i + 1;
+      if (add8) {
+        buttonNumber += 8; // Add +8 to the button number if add8 is true.
+      }
+      
       Serial.print("Shifter ");
-      Serial.print(i + 1);
+      Serial.print(buttonNumber);
       Serial.println(" is within the range.");
-      Joystick.button(i + 1, true);
+      Joystick.button(buttonNumber, true);
   } else {
-      Joystick.button(i,false);
+      int buttonNumber = i + 1;
+      if (add8) {
+        buttonNumber += 8; // Add +8 to the button number if add8 is true.
+      }
+      Joystick.button(buttonNumber,false);
+      Joystick.button(i + 1,false);
       continue;
   }
 
   }
   Serial.println(data[8].value1);
-  delay(1000);
+  delay(10);
 }
 
