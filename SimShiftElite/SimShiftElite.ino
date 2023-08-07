@@ -50,6 +50,9 @@ void setup() {
   Joystick.begin();
   Serial.begin(115200);
   rangeOffset = data[8].value1;
+
+  pinMode(0, INPUT);
+  pinMode(1, INPUT);
 }
 
 void loop() {
@@ -144,13 +147,13 @@ void loop() {
   Serial.print(potValue1);
   Serial.print(", ");
   Serial.println(potValue2);
-  delay(1);
+  delay(5);
 
   for (int i = 0; i < 8; i++) {
     if (isWithinRange(data[i], rangeOffset, potValue1, potValue2)) {
-      Serial.print("Shifter ");
-      Serial.print(i + 1);
-      Serial.println(" is within the range.");
+      //Serial.print("Shifter ");
+      //Serial.print(i + 1);
+      //Serial.println(" is within the range.");
       Joystick.button(i + 1, true);
   } else {
       Joystick.button(i + 1,false);
@@ -158,5 +161,5 @@ void loop() {
   }
 
   }
-  delay(1);
+  delay(5);
 }
