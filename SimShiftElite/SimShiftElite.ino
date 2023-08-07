@@ -2,9 +2,9 @@
 //  STILL WORK IN PROGRESS! USE IT ON YOUR OWN!!! Also use arduino-pico core from earlphilhowerr
 
 //TODO:
-// 1: Clean up messy code and add a better logic
+// 1: Clean up messy code and add a better logic  NOT DONE (yet)
 // 2: Add Smoothed library for adc readings -- not needed, because we are adding rangeOffset
-// 3: Add the main logic
+// 3: Add the main logic  DONE
 
 #include <Arduino.h>
 #include <EEPROM.h>
@@ -15,7 +15,7 @@ struct adcValues {
   int value2;
 };
 
-adcValues data[9] = {
+adcValues data[9] = {   //these are all default values. when you run clearDATA, everything but except the range offset become zero.
   {10, 10},
   {20, 20},
   {30, 30},
@@ -29,8 +29,6 @@ adcValues data[9] = {
 
 int rangeOffset = data[8].value1;
 
-int lastPressedButton = 0;
-
 bool isWithinRange(adcValues values, int rangeOffset, int potValue1, int potValue2) {
   int lowerBound1 = values.value1 - rangeOffset;
   int upperBound1 = values.value1 + rangeOffset;
@@ -43,18 +41,15 @@ bool isWithinRange(adcValues values, int rangeOffset, int potValue1, int potValu
 
 void setup() {
   analogReadResolution(12);
-  pinMode(2, INPUT);
   EEPROM.begin(512);
   byte eepromstatus = EEPROM.read(0);
   if (eepromstatus != 0) {
     EEPROM.get(0, data);
   } else {
-  
   }
   Joystick.begin();
   Serial.begin(115200);
   rangeOffset = data[8].value1;
-  
 }
 
 void loop() {
@@ -84,6 +79,7 @@ void loop() {
             for (int i = 0; i < 9; i++) {
               data[i].value1 = 0;
               data[i].value2 = 0;
+            data[8].value1 = 100; //default rangeOffset is 100
             }
             Serial.println("cleared succesfully!");
 
@@ -148,30 +144,19 @@ void loop() {
   Serial.print(potValue1);
   Serial.print(", ");
   Serial.println(potValue2);
-  delay(10);
-
-  int inputState = digitalRead(2);
-  int buttonOffset = (inputState == LOW) ? 0 : 8;
+  delay(1);
 
   for (int i = 0; i < 8; i++) {
-  int buttonIndex = i + 1 + buttonOffset;
-
-  if (lastPressedButton != 0) {
-  Joystick.button(lastPressedButton, false);
-  lastPressedButton = 0;
+    if (isWithinRange(data[i], rangeOffset, potValue1, potValue2)) {
+      Serial.print("Shifter ");
+      Serial.print(i + 1);
+      Serial.println(" is within the range.");
+      Joystick.button(i + 1, true);
+  } else {
+      Joystick.button(i + 1,false);
+      continue;
   }
 
-  if (isWithinRange(data[i], rangeOffset, potValue1, potValue2)) {
-  int buttonIndex = i + 1 + buttonOffset;
-  Serial.print("Shifter ");
-  Serial.print(buttonIndex);
-  Serial.println(" is within the range.");
-  Joystick.button(buttonIndex, true);
-  lastPressedButton = buttonIndex;
-}
-
-}
-
-  Serial.println(digitalRead(2));
-
+  }
+  delay(1);
 }
