@@ -51,8 +51,10 @@ void setup() {
   Serial.begin(115200);
   rangeOffset = data[8].value1;
 
-  pinMode(0, INPUT);
-  pinMode(1, INPUT);
+  for (int pins = 0; pins < 21; pins++) {
+    pinMode(pins, INPUT_PULLUP);
+  }
+
 }
 
 void loop() {
@@ -141,13 +143,14 @@ void loop() {
         }
   } Serial.flush();
 
+  delay(5);
+
   int potValue1 = analogRead(A0);
   int potValue2 = analogRead(A1);
 
   Serial.print(potValue1);
   Serial.print(", ");
   Serial.println(potValue2);
-  delay(5);
 
   for (int i = 0; i < 8; i++) {
     if (isWithinRange(data[i], rangeOffset, potValue1, potValue2)) {
@@ -155,11 +158,19 @@ void loop() {
       //Serial.print(i + 1);
       //Serial.println(" is within the range.");
       Joystick.button(i + 1, true);
-  } else {
-      Joystick.button(i + 1,false);
+    } else {
+      Joystick.button(i + 1, false);
       continue;
+    }
+
   }
 
+  for (int buttons = 0; buttons < 20; buttons++) {
+    if (digitalRead(buttons) == LOW) {
+      Joystick.button(buttons + 9, true);
+    } else {
+      Joystick.button(buttons + 9, false);
+    }
   }
   delay(5);
 }
