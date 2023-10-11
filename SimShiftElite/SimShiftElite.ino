@@ -39,8 +39,14 @@ bool isWithinRange(adcValues values, int rangeOffset, int potValue1, int potValu
           (potValue2 >= lowerBound2 && potValue2 <= upperBound2));
 }
 
+}
+
 void setup() {
-  analogReadResolution(12);
+  #if defined(ARDUINO_ARCH_RP2040) && !defined(__MBED__)
+    analogReadResolution(12);
+  #else
+    analogReadResolution(10);
+  #endif
   EEPROM.begin(512);
   byte eepromstatus = EEPROM.read(0);
   if (eepromstatus != 0) {
