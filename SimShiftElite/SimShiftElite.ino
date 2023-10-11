@@ -15,7 +15,7 @@ struct adcValues {
   int value2;
 };
 
-adcValues data[9] = {   //these are all default values. when you run clearDATA, everything but except the range offset become zero.
+adcValues data[9] = {   //these are all default values. when you run clearDATA, everything but except the rangeOffset becomes zero.
   {10, 10},
   {20, 20},
   {30, 30},
@@ -24,7 +24,7 @@ adcValues data[9] = {   //these are all default values. when you run clearDATA, 
   {60, 60},
   {70, 70},
   {80, 80},
-  {100, 100}    //first one is the rangeOffset. its here because it gets written to the eeprom
+  {100, 100}    //first one is the rangeOffset. its here because it gets written to the eeprom the second one isnt used
 };
 
 int rangeOffset = data[8].value1;
